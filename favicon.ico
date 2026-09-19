@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maude’s Games | Great Games. Endless Adventures.</title>
+  <meta name="description" content="Discover Maude’s Games: original arcade, action, adventure, and career-based games made for players who want a challenge.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#05070b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305070b'/%3E%3Cpath d='M10 45V18h8l14 15 14-15h8v27H44V32L32 45 20 32v13z' fill='%23ffae00'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #05070b;
+      --ink-2: #0b111b;
+      --panel: #111927;
+      --panel-2: #161f2f;
+      --gold: #ffae00;
+      --gold-2: #ffce64;
+      --paper: #f4f7fb;
+      --muted: #aab5c5;
+      --line: rgba(255,255,255,.12);
+      --shadow: 0 24px 70px rgba(0,0,0,.42);
+      --max: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--ink); }
+    body {
+      margin: 0;
+      color: var(--paper);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(44,103,160,.12), transparent 30rem),
+        radial-gradient(circle at 85% 28%, rgba(255,174,0,.08), transparent 26rem),
+        var(--ink);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid var(--gold-2); outline-offset: 4px; }
+
+    .shell { width: min(calc(100% - 40px), var(--max)); margin-inline: auto; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold-2);
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: .92rem;
+    }
+    .eyebrow::before { content: ""; width: 32px; height: 2px; background: var(--gold); }
+    h1, h2, h3 {
+      margin: 0;
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      line-height: .95;
+      letter-spacing: -.02em;
+    }
+    h1 { font-size: clamp(3.4rem, 8vw, 7.8rem); }
+    h2 { font-size: clamp(2.8rem, 6vw, 5.6rem); }
+    h3 { font-size: 2rem; }
+    p { margin: 0; }
+
+    .site-header {
+      position: fixed;
+      z-index: 20;
+      inset: 0 0 auto;
+      background: linear-gradient(to bottom, rgba(3,6,11,.94), rgba(3,6,11,.74), transparent);
+      transition: background .25s ease, box-shadow .25s ease;
+    }
+    .site-header.scrolled {
+      background: rgba(5,7,11,.94);
+      box-shadow: 0 1px 0 var(--line);
+      backdrop-filter: blur(16px);
+    }
+    .nav {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 800;
+      font-size: 1.45rem;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+    .brand img {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      object-fit: cover;
+      box-shadow: 0 8px 26px rgba(0,0,0,.45);
+    }
+    .brand span { color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 26px; }
+    .nav-links a {
+      text-decoration: none;
+      color: #d7dee9;
+      font-size: .92rem;
+      font-weight: 600;
+      transition: color .2s ease;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      padding: 11px 18px;
+      border: 1px solid rgba(255,174,0,.55);
+      border-radius: 999px;
+      color: var(--gold-2) !important;
+    }
+
+    .hero {
+      min-height: 760px;
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background: url("./assets/hero.webp") center/cover no-repeat;
+      transform: scale(1.012);
+      animation: heroIn 1.2s cubic-bezier(.2,.8,.2,1) both;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(to bottom, rgba(5,7,11,.12) 40%, rgba(5,7,11,.64) 72%, var(--ink) 100%),
+        linear-gradient(to right, rgba(5,7,11,.55), transparent 45%, rgba(5,7,11,.28));
+    }
+    @keyframes heroIn { from { opacity: .2; transform: scale(1.07); } }
+    .hero-copy {
+      width: min(720px, 100%);
+      padding: 170px 0 72px;
+    }
+    .hero-copy h1 {
+      max-width: 650px;
+      text-shadow: 0 10px 35px rgba(0,0,0,.75);
+    }
+    .hero-copy h1 em { color: var(--gold); font-style: normal; }
+    .hero-copy p {
+      max-width: 610px;
+      margin-top: 22px;
+      color: #d7dfeb;
+      font-size: clamp(1rem, 2vw, 1.22rem);
+      text-shadow: 0 3px 20px #000;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .button {
+      min-height: 52px;
+      padding: 14px 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 800;
+      letter-spacing: .08em;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .button.primary {
+      color: #100b00;
+      background: linear-gradient(135deg, #ffd36f, var(--gold) 58%, #e68500);
+      box-shadow: 0 13px 38px rgba(255,174,0,.24);
+    }
+    .button.secondary {
+      background: rgba(5,7,11,.62);
+      border-color: rgba(255,255,255,.32);
+      backdrop-filter: blur(10px);
+    }
+    .arrow { font-size: 1.2em; transition: transform .2s ease; }
+    .button:hover .arrow, .game-link:hover .arrow { transform: translateX(4px); }
+
+    .section { padding: 110px 0; }
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0,1.15fr) minmax(260px,.85fr);
+      align-items: end;
+      gap: 50px;
+      margin-bottom: 46px;
+    }
+    .section-heading p { color: var(--muted); max-width: 540px; }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 20px;
+    }
+    .game-card {
+      position: relative;
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(145deg, rgba(22,31,47,.94), rgba(8,13,22,.98));
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 55px rgba(0,0,0,.2);
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .game-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,174,0,.5);
+      box-shadow: 0 26px 70px rgba(0,0,0,.42);
+    }
+    .game-art {
+      position: relative;
+      height: 220px;
+      flex: 0 0 auto;
+      background-color: #111827;
+      background-repeat: no-repeat;
+      background-image: url("./assets/catalog.webp");
+      background-size: 396% 379%;
+    }
+    .game-art::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 45%;
+      background: linear-gradient(transparent, rgba(8,13,22,.92));
+    }
+    .art-neuro { background-position: 15.2% 12.9%; }
+    .art-reflex { background-position: 50.8% 12.9%; }
+    .art-obstiq { background-position: 86.4% 12.9%; }
+    .art-endura { background-position: 15.2% 67.2%; }
+    .art-stackr { background-position: 50.8% 67.2%; }
+    .art-ascend { background-position: 86.4% 67.2%; }
+    .art-ninja {
+      background-image: url("./assets/hero.webp");
+      background-size: 225% auto;
+      background-position: 32% 50%;
+    }
+    .art-office {
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(120deg, rgba(255,174,0,.2), transparent 42%),
+        radial-gradient(circle at 75% 28%, rgba(68,154,255,.2), transparent 32%),
+        #0a101b;
+    }
+    .art-office::before {
+      content: "MN";
+      width: 98px;
+      height: 98px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,174,0,.58);
+      color: #f5f7fb;
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 800;
+      font-size: 2.6rem;
+      letter-spacing: -.06em;
+      box-shadow: inset 0 0 28px rgba(255,174,0,.08), 0 0 45px rgba(255,174,0,.12);
+    }
+    .game-body { padding: 6px 24px 24px; display: flex; flex: 1; flex-direction: column; }
+    .game-kicker {
+      margin-bottom: 8px;
+      color: var(--gold-2);
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+    .game-body p { color: var(--muted); margin-top: 12px; font-size: .95rem; }
+    .game-link {
+      width: fit-content;
+      margin-top: auto;
+      padding-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold-2);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .9rem;
+    }
+
+    .odyssey {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 90% 15%, rgba(255,174,0,.18), transparent 35%),
+        linear-gradient(140deg, #151f2f, #090e17 68%);
+      border-block: 1px solid var(--line);
+    }
+    .odyssey::after {
+      content: "OFFICE ODYSSEY";
+      position: absolute;
+      right: -38px;
+      bottom: -15px;
+      color: rgba(255,255,255,.025);
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 800;
+      font-size: clamp(5rem, 14vw, 13rem);
+      line-height: .7;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .odyssey-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: .88fr 1.12fr;
+      align-items: center;
+      gap: 72px;
+    }
+    .odyssey-mark {
+      min-height: 500px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      border: 1px solid rgba(255,255,255,.1);
+      background:
+        linear-gradient(130deg, transparent, rgba(255,174,0,.1)),
+        repeating-linear-gradient(90deg, transparent 0 69px, rgba(255,255,255,.025) 70px),
+        repeating-linear-gradient(0deg, transparent 0 69px, rgba(255,255,255,.025) 70px);
+      border-radius: 16px;
+    }
+    .odyssey-mark span {
+      width: 190px;
+      height: 190px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--gold);
+      background: rgba(5,7,11,.72);
+      box-shadow: 0 0 0 15px rgba(255,174,0,.04), 0 0 80px rgba(255,174,0,.16);
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 800;
+      font-size: 4.4rem;
+    }
+    .odyssey-copy h2 { margin-top: 14px; }
+    .odyssey-copy > p { color: #bac4d2; max-width: 620px; margin-top: 22px; font-size: 1.06rem; }
+    .levels {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 26px;
+    }
+    .levels span {
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #d7deea;
+      font-size: .78rem;
+      background: rgba(255,255,255,.035);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1.15fr) minmax(340px,.85fr);
+      gap: 80px;
+      align-items: start;
+    }
+    .about-copy h2 { margin: 14px 0 26px; }
+    .about-copy p { max-width: 700px; color: #b5c0cf; font-size: 1.05rem; }
+    .principles { display: grid; gap: 12px; }
+    .principle {
+      padding: 22px;
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 16px;
+      align-items: start;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.025);
+    }
+    .principle b {
+      color: var(--gold);
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+    .principle strong { display: block; text-transform: uppercase; letter-spacing: .03em; }
+    .principle small { display: block; color: var(--muted); margin-top: 3px; font-size: .86rem; }
+
+    .closing {
+      text-align: center;
+      padding-top: 40px;
+    }
+    .closing-card {
+      padding: clamp(46px, 8vw, 86px) 24px;
+      border: 1px solid rgba(255,174,0,.2);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 50% 0, rgba(255,174,0,.15), transparent 38%),
+        linear-gradient(145deg, #121a28, #090e17);
+      box-shadow: var(--shadow);
+    }
+    .closing-card p { max-width: 620px; color: var(--muted); margin: 20px auto 0; }
+    .closing-card .actions { justify-content: center; }
+
+    footer { padding: 54px 0 36px; }
+    .footer-main {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--line);
+    }
+    .socials { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 9px; }
+    .socials a {
+      padding: 8px 11px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: #c4cedb;
+      text-decoration: none;
+      font-size: .82rem;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .socials a:hover { color: var(--gold-2); border-color: rgba(255,174,0,.5); }
+    .footer-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 22px;
+      color: #778397;
+      font-size: .8rem;
+    }
+    .footer-meta a { color: #aeb8c7; text-decoration: none; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 980px) {
+      .games-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .odyssey-grid, .about-grid { grid-template-columns: 1fr; gap: 46px; }
+      .odyssey-mark { min-height: 360px; }
+    }
+    @media (max-width: 720px) {
+      .shell { width: min(calc(100% - 28px), var(--max)); }
+      .nav { min-height: 70px; }
+      .brand img { width: 46px; height: 46px; border-radius: 11px; }
+      .brand { font-size: 1.18rem; }
+      .nav-links a:not(.nav-cta) { display: none; }
+      .nav-cta { padding: 9px 13px; font-size: .8rem !important; }
+      .hero { min-height: 720px; }
+      .hero::before { background-position: 50% center; }
+      .hero::after {
+        background:
+          linear-gradient(to bottom, rgba(5,7,11,.15) 28%, rgba(5,7,11,.62) 62%, var(--ink) 100%);
+      }
+      .hero-copy { padding: 300px 0 54px; }
+      .hero-copy h1 { font-size: clamp(3.25rem, 16vw, 5.2rem); }
+      .button { width: 100%; }
+      .section { padding: 78px 0; }
+      .section-heading { grid-template-columns: 1fr; gap: 18px; margin-bottom: 34px; }
+      .games-grid { grid-template-columns: 1fr; }
+      .game-card { min-height: 410px; }
+      .game-art { height: 218px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .footer-main, .footer-meta { flex-direction: column; align-items: flex-start; }
+      .socials { justify-content: flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Maude's Games",
+    "description": "Independent game studio creating arcade, action, adventure, and career-based games.",
+    "email": "info@seekemhub.com",
+    "logo": "./assets/logo.webp",
+    "sameAs": [
+      "https://www.facebook.com/MaudesGames",
+      "https://www.instagram.com/maudesgames",
+      "https://x.com/MaudesGames",
+      "https://www.youtube.com/@MaudesGames",
+      "https://www.linkedin.com/company/maudesgames",
+      "https://www.pinterest.com/MaudesGames",
+      "https://www.tiktok.com/@maudesgames",
+      "https://play.google.com/store/apps/developer?id=Maude%27s+Games&hl=en_US"
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header" id="header">
+    <nav class="nav shell" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="Maude’s Games home">
+        <img src="./assets/logo.webp" alt="">
+        Maude’s <span>Games</span>
+      </a>
+      <div class="nav-links">
+        <a href="#games">Games</a>
+        <a href="#office-odyssey">Office Odyssey</a>
+        <a href="#about">About</a>
+        <a class="nav-cta" href="https://play.google.com/store/apps/developer?id=Maude%27s+Games&amp;hl=en_US" target="_blank" rel="noopener">Google Play</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="shell hero-copy">
+        <span class="eyebrow">Independent game studio</span>
+        <h1 id="hero-title">Every world begins with <em>play.</em></h1>
+        <p>Step into quick challenges, bold adventures, and career-driven worlds built to keep you moving, thinking, and coming back for one more run.</p>
+        <div class="actions">
+          <a class="button primary" href="#games">Explore the games <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="button secondary" href="https://play.google.com/store/apps/developer?id=Maude%27s+Games&amp;hl=en_US" target="_blank" rel="noopener">Visit Google Play</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="games" aria-labelledby="games-title">
+      <div class="shell">
+        <div class="section-heading reveal">
+          <div>
+            <span class="eyebrow">The collection</span>
+            <h2 id="games-title">Choose your next challenge.</h2>
+          </div>
+          <p>From precision arcade runs to sci-fi action and ancient-world adventures, every Maude’s Games title offers an easy entry point—and a reason to keep improving.</p>
+        </div>
+
+        <div class="games-grid">
+          <article class="game-card reveal">
+            <div class="game-art art-neuro" role="img" aria-label="NeuroDash Go game artwork"></div>
+            <div class="game-body">
+              <span class="game-kicker">Sci-fi action</span>
+              <h3>NeuroDash Go</h3>
+              <p>Dash into a futuristic challenge shaped by speed, focus, and quick decisions.</p>
+              <a class="game-link" href="https://play.google.com/store/apps/details?id=com.neurodash.go" target="_blank" rel="noopener">Get it on Google Play <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card reveal">
+            <div class="game-art art-reflex" role="img" aria-label="Reflex Tap game artwork"></div>
+            <div class="game-body">
+              <span class="game-kicker">Reflex arcade</span>
+              <h3>Reflex Tap</h3>
+              <p>Launch into a precision-driven space run where timing matters and every tap counts.</p>
+              <a class="game-link" href="https://play.google.com/store/apps/details?id=com.reflex.taps" target="_blank" rel="noopener">Get it on Google Play <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card reveal">
+            <div class="game-art art-obstiq" role="img" aria-label="Obstiq game artwork"></div>
+            <div class="game-body">
+              <span class="game-kicker">Treasure arcade</span>
+              <h3>Obstiq</h3>
+              <p>Break through obstacles, chase the treasure, and keep the adventure moving.</p>
+              <a class="game-link" href="https://play.google.com/store/apps/details?id=com.obstiq.obstiqq" target="_blank" rel="noopener">Get it on Google Play <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card reveal">
+            <div class="game-art art-endura" role="img" aria-label="Endura Run game artwork"></div>
+            <div class="game-body">
+              <span class="game-kicker">Adventure runner</span>
+              <h3>Endura Run</h3>
+              <p>Race through an ancient world where every turn tests your timing and endurance.</p>
+              <a class="game-link" href="https://play.google.com/store/apps/details?id=com.endura.run" target="_blank" rel="noopener">Get it on Google Play <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card reveal">
+            <div class="game-art art-stackr" role="img" aria-label="Stackr Up game artwork"></div>
+            <div class="game-body">
+              <span class="game-kicker">Monster action</span>
+              <h3>Stackr Up</h3>
+              <p>Defend your path from monsters and zombies as you fight toward the next level.</p>
+              <a class="game-link" href="https://play.google.com/store/apps/details?id=com.stackr.up" target="_blank" rel="noopener">Get it on Google Play <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card reveal">
+            <div class="game-art art-ascend" role="img" aria-label="Ascend Play game artwork"></div>
+            <div class="game-body">
+              <span class="game-kicker">Timing arcade</span>
+              <h3>Ascend Play</h3>
+              <p>Extend the bridge, trust your timing, and keep climbing—one precise move at a time.</p>
+              <a class="game-link" href="https://play.google.com/store/apps/details?id=com.ascend.play" target="_blank" rel="noopener">Get it on Google Play <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card reveal">
+            <div class="game-art art-ninja" role="img" aria-label="Ninja Crush game artwork"></div>
+            <div class="game-body">
+              <span class="game-kicker">Ninja action</span>
+              <h3>Ninja Crush</h3>
+              <p>Aim, launch, and cut through enemies in a sharp, fast-moving action challenge.</p>
+              <a class="game-link" href="https://play.google.com/store/apps/details?id=com.ninja.crushh" target="_blank" rel="noopener">Get it on Google Play <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
+
+          <article class="game-card reveal">
+            <div class="game-art art-office" role="img" aria-label="Maude Natasha Office Odyssey monogram artwork"></div>
+            <div class="game-body">
+              <span class="game-kicker">Career adventure</span>
+              <h3>Office Odyssey</h3>
+              <p>Play through the climb from first hustle to entrepreneur and strategic consultant.</p>
+              <a class="game-link" href="https://officeodyssey.maudenatasha.com/" target="_blank" rel="noopener">Explore Office Odyssey <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section odyssey" id="office-odyssey" aria-labelledby="odyssey-title">
+      <div class="shell odyssey-grid">
+        <div class="odyssey-mark reveal" aria-hidden="true"><span>MN</span></div>
+        <div class="odyssey-copy reveal">
+          <span class="eyebrow">Featured world</span>
+          <h2 id="odyssey-title">Maude Natasha Office Odyssey</h2>
+          <p>Career growth becomes an adventure. Move from early hustles through sales, the corporate break-in, recruiting, compliance leadership, entrepreneurship, and consulting—while testing the real-world knowledge required to advance.</p>
+          <div class="levels" aria-label="Game progression">
+            <span>Hustles</span><span>Sales</span><span>Corporate Break-In</span><span>Recruiting</span><span>Compliance</span><span>Entrepreneur</span><span>Consultant</span>
+          </div>
+          <div class="actions">
+            <a class="button primary" href="https://officeodyssey.maudenatasha.com/" target="_blank" rel="noopener">Enter the Odyssey <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="shell about-grid">
+        <div class="about-copy reveal">
+          <span class="eyebrow">About the studio</span>
+          <h2 id="about-title">Great games. Endless adventures.</h2>
+          <p>Maude’s Games is an independent game studio creating approachable experiences across arcade, action, adventure, and career-based play. Our worlds are built around a simple idea: the best games welcome you quickly, challenge you clearly, and leave you eager to try again.</p>
+        </div>
+        <div class="principles reveal" aria-label="Studio principles">
+          <div class="principle"><b>01</b><div><strong>Exciting gameplay</strong><small>Immediate challenges with satisfying momentum.</small></div></div>
+          <div class="principle"><b>02</b><div><strong>Immersive experiences</strong><small>Distinct worlds that make every title memorable.</small></div></div>
+          <div class="principle"><b>03</b><div><strong>Built for players</strong><small>Accessible to begin, rewarding to improve.</small></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section closing" aria-labelledby="closing-title">
+      <div class="shell">
+        <div class="closing-card reveal">
+          <span class="eyebrow">Your next adventure</span>
+          <h2 id="closing-title">Ready when you are.</h2>
+          <p>Explore the full Maude’s Games collection on Google Play and choose the world you want to enter next.</p>
+          <div class="actions">
+            <a class="button primary" href="https://play.google.com/store/apps/developer?id=Maude%27s+Games&amp;hl=en_US" target="_blank" rel="noopener">View all games <span class="arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="footer-main">
+        <a class="brand" href="#top"><img src="./assets/logo.webp" alt=""><span>Maude’s Games</span></a>
+        <div class="socials" aria-label="Social media">
+          <a href="https://www.facebook.com/MaudesGames" target="_blank" rel="noopener">Facebook</a>
+          <a href="https://www.instagram.com/maudesgames" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://x.com/MaudesGames" target="_blank" rel="noopener">X</a>
+          <a href="https://www.youtube.com/@MaudesGames" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://www.linkedin.com/company/maudesgames" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://www.pinterest.com/MaudesGames" target="_blank" rel="noopener">Pinterest</a>
+          <a href="https://www.tiktok.com/@maudesgames" target="_blank" rel="noopener">TikTok</a>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <span>© <span id="year"></span> Maude’s Games. All rights reserved.</span>
+        <a href="mailto:info@seekemhub.com">info@seekemhub.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    const header = document.getElementById("header");
+    const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    const reveals = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12 });
+      reveals.forEach((element) => observer.observe(element));
+    } else {
+      reveals.forEach((element) => element.classList.add("visible"));
+    }
+  </script>
+</body>
+</html>
